@@ -4,22 +4,20 @@ import android.graphics.Bitmap;
 import android.media.ThumbnailUtils;
 
 public class Foto {	
-	public Bitmap img; // bitmap para a imagem reduzida
-	public Bitmap img_thumb;
-	public String nome; // nome da imagem (para mostrar no
-						// ListView(firula..)
-	public String url; // Url Completa da Imagem :) para ser aberta na
-						// Activity PhotoEdit
-
+	public Bitmap img; // Bitmap foto tamanho original
+	public Bitmap img_thumb; // Bitmap thumbnail da foto
+	public String nome; // nome da foto
+	public String url; // caminho completo da foto
+	
+	// construtor
 	public Foto(Bitmap img, String nome, String url) {
 		// TODO Auto-generated constructor stub
 		this.img = img;
 		this.nome = nome;
 		this.url = url;
 		
-		// gera thumbnail da foto
+		// gera o thumbnail da foto 60 x 60
 		new ThumbnailUtils();
-		img_thumb = ThumbnailUtils.extractThumbnail(img, 60, 60);	
-		
+		img_thumb = ThumbnailUtils.extractThumbnail(img, 60, 60);		
 	}
 }

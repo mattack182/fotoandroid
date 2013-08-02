@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -130,17 +131,15 @@ public class MainActivity extends Activity {
 		// TODO Auto-generated method stub
 		// super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode == 80 && resultCode == RESULT_OK) {
-			Bitmap foto_bmp = null;
-			try {
-				foto_bmp = BitmapFactory.decodeFile(f.getAbsolutePath());
-			} catch (Exception e) {
-				// TODO: handle exception
-			}
-			
+		
+			Bitmap bitmap_temp = BitmapFactory.decodeFile(f.getAbsolutePath());
 			// instancia novo objeto Foto
-			Foto new_foto = new Foto(foto_bmp, f.getName(), f.getAbsolutePath());
+			Foto new_foto = new Foto(bitmap_temp, f.getName(), f.getAbsolutePath());
 			// adiciona efeito metodo da classe Foto
-			new_foto.doColorFilter(foto_bmp, 0, 0, 1);
+			//Log.v("FOTOANDROID", "ENTRANDO NO doColorFilter");
+			//new_foto.doColorFilter(0, 1, 0);
+			
+			
 			// adiciona nova foto no arraylist<Foto>
 			foto.add(new_foto);
 			// notifica adapter para atualizar o conteudo

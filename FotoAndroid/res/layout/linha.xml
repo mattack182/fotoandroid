@@ -1,18 +1,26 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout1"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_height="fill_parent"
+    android:gravity="left" >
 
     <ImageView
         android:id="@+id/imageView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
         android:src="@drawable/ic_launcher" />
 
     <TextView
         android:id="@+id/textView_nome_foto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="TextView" />
+        android:layout_alignBottom="@+id/imageView1"
+        android:layout_marginBottom="14dp"
+        android:layout_marginLeft="19dp"
+        android:layout_toRightOf="@+id/imageView1"
+        android:text="TextView"
+        android:textColor="#000000" />
 
-</FrameLayout>
+</RelativeLayout>

@@ -37,7 +37,7 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		counter = 0;
 		
-		ListView lista = (ListView) findViewById(R.id.listView1);
+		ListView lista = (ListView) findViewById(R.id.ListView1);
 		adaptador = new Adaptador(getApplicationContext());
 		lista.setAdapter(adaptador);
 		

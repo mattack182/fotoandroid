@@ -136,7 +136,14 @@ public class MainActivity extends Activity {
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
-			foto.add(new Foto(foto_bmp, f.getName(), f.getAbsolutePath()));
+			
+			// instancia novo objeto Foto
+			Foto new_foto = new Foto(foto_bmp, f.getName(), f.getAbsolutePath());
+			// adiciona efeito metodo da classe Foto
+			new_foto.doColorFilter(foto_bmp, 0, 0, 1);
+			// adiciona nova foto no arraylist<Foto>
+			foto.add(new_foto);
+			// notifica adapter para atualizar o conteudo
 			adaptador.notifyDataSetChanged();
 		}
 

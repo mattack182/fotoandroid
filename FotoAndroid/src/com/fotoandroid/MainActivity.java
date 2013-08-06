@@ -1,8 +1,8 @@
 package com.fotoandroid;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -40,6 +41,18 @@ public class MainActivity extends Activity {
 		ListView lista = (ListView) findViewById(R.id.ListView1);
 		adaptador = new Adaptador(getApplicationContext());
 		lista.setAdapter(adaptador);
+		lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				// TODO Auto-generated method stub
+				
+				Intent in = new Intent(getApplicationContext(), Tela_2.class);
+				in.putExtra("path", foto_array.get(arg2).path);
+				startActivityForResult(in, 81);		
+			}
+		});
 
 	}
 

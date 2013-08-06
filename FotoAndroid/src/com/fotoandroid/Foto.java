@@ -21,8 +21,11 @@ public class Foto {
 	// CONSTRUTOR 
 	public Foto(String nome, String path) {
 		this.nome = nome;
-		this.path = path;
-		img_thumb = getThumb(); // armazena thumbnail no objeto
+		this.path = path;		
+		Bitmap bitmap_temp = BitmapFactory.decodeFile(path).copy(Bitmap.Config.ARGB_4444, true);
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap_temp.compress(Bitmap.CompressFormat.JPEG, 80, stream);
+        img_thumb = ThumbnailUtils.extractThumbnail(bitmap_temp, 70, 70);		
 	}
 	
 	// METODOS PUBLICOS	
@@ -33,7 +36,7 @@ public class Foto {
 	
 	public Bitmap getThumb(){
 		Bitmap bitmap_new_thumb = null;
-		if(changed = true){
+		if(changed){
 			Bitmap bitmap_temp = BitmapFactory.decodeFile(path).copy(Bitmap.Config.ARGB_4444, true);
 			ByteArrayOutputStream stream = new ByteArrayOutputStream();
             bitmap_temp.compress(Bitmap.CompressFormat.JPEG, 80, stream);
@@ -57,7 +60,7 @@ public class Foto {
 		
 		switch (type) {		
 		case FILTRO_COR:						// Filtro de cor -> doColorFilter
-			doColorFilter(img, red, green, blue);
+			img = doColorFilter(img, red, green, blue);
 			return 0;		
 		case FILTRO_NEGATIVO:					// Negativo -> doNegative
 			return 0;		

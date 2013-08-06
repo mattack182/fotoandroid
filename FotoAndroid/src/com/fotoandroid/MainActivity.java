@@ -26,8 +26,7 @@ import android.widget.TextView;
 // imports do projeto
 
 public class MainActivity extends Activity {
-	public int counter;
-	public File f;
+	public int counter;	
 	Adaptador adaptador;
 	ArrayList<Foto> foto = new ArrayList<Foto>();
 
@@ -67,7 +66,7 @@ public class MainActivity extends Activity {
 	
 	class Adaptador extends BaseAdapter {
 		Context context;
-		LayoutInflater inflater;
+		LayoutInflater inflater;	
 
 		public Adaptador(Context context) {
 			this.context = context;
@@ -96,6 +95,7 @@ public class MainActivity extends Activity {
 		@Override
 		public View getView(int arg0, View arg1, ViewGroup arg2) {
 			// TODO Auto-generated method stub
+			Log.v("TAGLOKA", "INICIO");
 			View linha = arg1;
 			if (linha == null) {
 				linha = inflater.inflate(R.layout.linha, arg2, false);
@@ -107,43 +107,53 @@ public class MainActivity extends Activity {
 			
 			// seta o thumbnail da linha
 			ImageView thumbnail = (ImageView)linha.findViewById(R.id.imageView1);
-			thumbnail.setImageBitmap(foto.get(arg0).img_thumb);
-			
+			thumbnail.setImageBitmap(foto.get(arg0).getThumb());
+			Log.v("TAGLOKA", "FIM");
 			return linha;
 			
 			
 		}
+		
+		
 
 	}
 	
+	public void salvaFoto(Bitmap bmp, String path){
+		
+	}
+	
 	public void capturaFoto(View v) {
-		f = new File(Environment.getExternalStorageDirectory(), "img" + counter
-				+ ".jpg");
-		counter++;
+		File f = new File(Environment.getExternalStorageDirectory(), "img" + counter+ ".jpg");
+		counter++;		
 		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
 		intent.putExtra("return-data", false);
+		intent.putExtra("path", f.getAbsolutePath());
 		startActivityForResult(intent, 80);
 	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
-		// super.onActivityResult(requestCode, resultCode, data);
+		super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode == 80 && resultCode == RESULT_OK) {
+			
+			String path = getIntent().getStringExtra("path");
+			Log.v("FOTOANDROID", path);
 		
-			Bitmap bitmap_temp = BitmapFactory.decodeFile(f.getAbsolutePath());
+			//Bitmap bitmap_temp = BitmapFactory.decodeFile(f.getAbsolutePath());
 			// instancia novo objeto Foto
-			Foto new_foto = new Foto(bitmap_temp, f.getName(), f.getAbsolutePath());
+			//Foto new_foto = new Foto(bitmap_temp, f.getName(), f.getAbsolutePath());
 			// adiciona efeito metodo da classe Foto
 			//Log.v("FOTOANDROID", "ENTRANDO NO doColorFilter");
 			//new_foto.doColorFilter(0, 1, 0);
 			
+			//new_foto.doImageProcessing(type, img, red, green, blue)
 			
 			// adiciona nova foto no arraylist<Foto>
-			foto.add(new_foto);
+			//foto.add(new_foto);
 			// notifica adapter para atualizar o conteudo
-			adaptador.notifyDataSetChanged();
+			//adaptador.notifyDataSetChanged();
 		}
 
 	}

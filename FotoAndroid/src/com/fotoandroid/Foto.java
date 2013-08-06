@@ -1,44 +1,84 @@
 package com.fotoandroid;
 
-import java.io.File;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.ThumbnailUtils;
-import android.net.Uri;
 
 public class Foto {	
-	public Bitmap imagem_mutable;
+	public Bitmap imagem_copy;
 	public Bitmap img_thumb; // Bitmap thumbnail da foto
 	public String nome; // nome da foto	
-	public String url; // String caminho completo da foto
-	public Uri url_uri; // Uri da foto
+	public String path; // String caminho completo da foto	
+	private boolean changed = false;
+	public final int FILTRO_COR = 1;
+	public final int FILTRO_NEGATIVO = 2;
+	public final int FILTRO_SEPIA = 3;
+	public final int FILTRO_OVERLAY = 4;
 	
-	// construtor
-	public Foto(Bitmap bmp, String nome, String url) {
-		// TODO Auto-generated constructor stub
-				
+	
+	
+	// CONSTRUTOR 
+	public Foto(Bitmap bmp, String nome, String path) {				
 		this.nome = nome;
-		this.url = url;
-		this.url_uri = Uri.parse(url);
-		this.imagem_mutable = bmp.copy(Bitmap.Config.ARGB_8888, true);
+		this.path = path;		
+		this.imagem_copy = bmp.copy(Bitmap.Config.ARGB_8888, true);
 		
 					
 		// gera o thumbnail da foto	
-		img_thumb = ThumbnailUtils.extractThumbnail(imagem_mutable, 70, 70);	
-	}
+		img_thumb = ThumbnailUtils.extractThumbnail(imagem_copy, 70, 70);
+	} // end of construtor class Foto
 	
-	public Bitmap getThumb(String path){
-		File f = new File()
-		Bitmap bitmap_temp = BitmapFactory.decodeFile(f.getAbsolutePath());
-		Bitmap bitmap_return = bitmap_temp.copy(Bitmap.Config.ARGB_8888, true);
+	public Bitmap getThumb(){
+		Bitmap bitmap_return = null;
+		if(changed = true){
+			Bitmap bitmap_temp = BitmapFactory.decodeFile(path).copy(Bitmap.Config.ARGB_8888, true);
+			bitmap_return = bitmap_temp.copy(Bitmap.Config.ARGB_8888, true);
+		}		
 		return bitmap_return;		
 	}
 	
+	public void setChangedFlag(){
+		this.changed = true;
+	}
+	
+	public boolean getChangedFlag(){
+		return changed;
+	}
 	
 	
-	public Bitmap doColorFilter(Bitmap img, double red, double green, double blue) {
+	public int doImageProcessing(int type, Bitmap img, double red, double green, double blue){
+		
+		
+		changed = true; // seta flag de alteração da imagem para que o thumbnail seja recriado
+		
+		switch(type){
+		case FILTRO_COR:			// Filtro de cor -> doColorFilter
+			doColorFilter(img, red, green, blue);
+			return 0;
+		case FILTRO_NEGATIVO:			// Negativo -> doNegative
+			return 0;
+		case FILTRO_SEPIA:			// Sepia -> doSepia
+			return 0;
+		case FILTRO_OVERLAY:			// Overlay -> doOverlay
+			return 0;
+		default:		// Caso de parametro invalido
+			changed = false; // altera a flag de bitmap pois nada foi alterado
+			return 1;				
+		}
+		
+	}
+	
+	
+	
+	/*
+	 * Algoritmo para filtrar cores
+	 * Parametros: 	Bitmap, (imagem alvo)
+	 * 				vermelho, verde, azul (fatores de multiplicação)
+	 * Seta boolean changed para 'true'
+	 * Retorna Bitmap
+	 */
+	private Bitmap doColorFilter(Bitmap img, double red, double green, double blue) {
         // image size
         int width = img.getWidth();
         int height = img.getHeight();       
@@ -61,6 +101,7 @@ public class Foto {
                 img.setPixel(x, y, Color.argb(A, R, G, B));
             }
         }
+        setChangedFlag();
         return img;
     }
 	

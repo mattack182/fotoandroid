@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class Tela_2 extends Activity {
@@ -33,7 +34,8 @@ public class Tela_2 extends Activity {
 	
 	private int VISIVEL = 0;
 	private int INVISIVEL = 4;
-	private Bitmap bmp;	
+	private Bitmap bmp;
+	private Bitmap bmp_preview;
 	private double seek1_value = 0;
 	private double seek2_value = 0;
 	private double seek3_value = 0;
@@ -45,7 +47,10 @@ public class Tela_2 extends Activity {
 	SeekBar seekbar1;
 	SeekBar seekbar2;
 	SeekBar seekbar3;
-	Button button_aplicar;	
+	TextView txt_red;
+	TextView txt_green;
+	TextView txt_blue;
+	Button button_aplicar;
 	Foto foto;
 	
 
@@ -57,13 +62,27 @@ public class Tela_2 extends Activity {
 		seekbar1 = (SeekBar)findViewById(R.id.seekBar1);
 		seekbar2 = (SeekBar)findViewById(R.id.seekBar2);
 		seekbar3 = (SeekBar)findViewById(R.id.seekBar3);
-		button_aplicar = (Button)findViewById(R.id.button1);
-		button_aplicar.setVisibility(INVISIVEL);
 		seekbar1.setVisibility(INVISIVEL);
 		seekbar2.setVisibility(INVISIVEL);
 		seekbar3.setVisibility(INVISIVEL);
+		
+		txt_red = (TextView)findViewById(R.id.textView1);		
+		txt_green = (TextView)findViewById(R.id.textView2);		
+		txt_blue = (TextView)findViewById(R.id.textView3);
+		txt_red.setText("Vermelho:");
+		txt_green.setText("Verde:");
+		txt_blue.setText("Azul:");
+		txt_red.setVisibility(INVISIVEL);
+		txt_green.setVisibility(INVISIVEL);
+		txt_blue.setVisibility(INVISIVEL);
+		
+		
+		button_aplicar = (Button)findViewById(R.id.button1);
+		button_aplicar.setVisibility(INVISIVEL);
+		
 		img_view_thumb = (ImageView)findViewById(R.id.imageView2);
 		img_view_thumb.setVisibility(INVISIVEL);
+		
 		path = getIntent().getStringExtra("path");
 		name = getIntent().getStringExtra("name");
 		index = getIntent().getIntExtra("arg2", 0);
@@ -81,20 +100,7 @@ public class Tela_2 extends Activity {
 		 intent.putExtra("arg2", index);
 		 setResult(RESULT_OK, intent);
 		 finish();
-	}
-	
-	
-	
-	
-//	public void voltar(View v){
-//		EditText ed = (EditText)findViewById(R.id.texto_tela1);
-//		String texto = ed.getText().toString();		
-//		Intent in = new Intent();
-//		in.putExtra("retorno", texto);
-//		setResult(RESULT_OK, in);
-//		finish();
-//	}
-	
+	}	
 	
 	public void atualizaTela(){
 		img_view = (ImageView)findViewById(R.id.imageView1);
@@ -120,17 +126,19 @@ public class Tela_2 extends Activity {
 				Bitmap bitmap_temp = bmp;
 				ByteArrayOutputStream stream = new ByteArrayOutputStream();
 	            bitmap_temp.compress(Bitmap.CompressFormat.JPEG, 70, stream);
-				foto.img_thumb = ThumbnailUtils.extractThumbnail(bitmap_temp, 120, 120);				
-				img_view_thumb.setImageBitmap(foto.img_thumb);
-				
-				img_view_thumb.setVisibility(VISIVEL);
-				
-				button_aplicar.setAlpha(1);				
-				button_aplicar.setVisibility(VISIVEL);
-				
+				foto.img_thumb = ThumbnailUtils.extractThumbnail(bitmap_temp, 150, 150);				
+				img_view_thumb.setImageBitmap(foto.img_thumb);			
+				img_view_thumb.setVisibility(VISIVEL);					
+				button_aplicar.setVisibility(VISIVEL);				
 				seekbar1.setVisibility(VISIVEL);
 				seekbar2.setVisibility(VISIVEL);
-				seekbar3.setVisibility(VISIVEL);				
+				seekbar3.setVisibility(VISIVEL);
+				txt_red.setVisibility(VISIVEL);
+				txt_green.setVisibility(VISIVEL);
+				txt_blue.setVisibility(VISIVEL);		
+				button_aplicar.setAlpha(1);
+				
+				// Controles Seekbar e atualização do thumbnail para preview
 				seekbar1.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 					@Override
 					public void onStopTrackingTouch(SeekBar seekBar) {
@@ -144,7 +152,8 @@ public class Tela_2 extends Activity {
 					public void onProgressChanged(SeekBar seekBar, int progress,
 							boolean fromUser) {
 						// TODO Auto-generated method stub
-						seek1_value = progress * 0.01;					
+						seek1_value = progress * 0.01;
+						txt_red.setText("Vermelho: "+progress);
 					}
 				});
 				seekbar2.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -166,6 +175,7 @@ public class Tela_2 extends Activity {
 							boolean fromUser) {
 						// TODO Auto-generated method stub
 						seek2_value = progress * 0.01;
+						txt_green.setText("Verde: "+progress);
 						
 					}
 				});
@@ -188,6 +198,7 @@ public class Tela_2 extends Activity {
 							boolean fromUser) {
 						// TODO Auto-generated method stub
 						seek3_value = progress * 0.01;
+						txt_blue.setText("Azul: "+progress);
 						
 					}
 				});
@@ -198,7 +209,11 @@ public class Tela_2 extends Activity {
 				seekbar1.setVisibility(INVISIVEL);
 				seekbar2.setVisibility(INVISIVEL);
 				seekbar3.setVisibility(INVISIVEL);
-				button_aplicar.setVisibility(INVISIVEL);
+				button_aplicar.setVisibility(INVISIVEL);				
+				img_view_thumb.setVisibility(INVISIVEL);					
+				txt_red.setVisibility(INVISIVEL);
+				txt_green.setVisibility(INVISIVEL);
+				txt_blue.setVisibility(INVISIVEL);				
 				img_view.setImageAlpha(255);				
 			}			
 			break;

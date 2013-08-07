@@ -7,7 +7,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -25,10 +24,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
+	
 	private File f = null;
 	public int counter;
 	public String TAG = "FotoAndroid";
-
 	Adaptador adaptador;
 	ArrayList<Foto> foto_array = new ArrayList<Foto>();
 
@@ -50,6 +49,8 @@ public class MainActivity extends Activity {
 				
 				Intent in = new Intent(getApplicationContext(), Tela_2.class);
 				in.putExtra("path", foto_array.get(arg2).path);
+				in.putExtra("name", foto_array.get(arg2).nome);
+				in.putExtra("arg2", arg2);
 				startActivityForResult(in, 81);		
 			}
 		});
@@ -68,16 +69,21 @@ public class MainActivity extends Activity {
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		// TODO Auto-generated method stub
 
-		switch (item.getItemId()) {
-		case R.id.action_settings:
-			capturaFoto(getCurrentFocus());
-			break;
-		}
+//		switch (item.getItemId()) {
+//		case R.id.action_settings:
+//			capturaFoto(getCurrentFocus());
+//			break;
+//		}
 
 		return super.onMenuItemSelected(featureId, item);
 
 	}
-
+	
+	
+	/*
+	 * Classe Adaptador
+	 */
+	
 	class Adaptador extends BaseAdapter {
 		Context context;
 		LayoutInflater inflater;
@@ -127,13 +133,9 @@ public class MainActivity extends Activity {
 
 	}
 
-	public void salvaFoto(Bitmap bmp, String path) {
-
-	}
-
 	public void capturaFoto(View v) {
-		f = new File(Environment.getExternalStorageDirectory(), "img" + counter
-				+ ".jpg");
+		
+		f = new File(Environment.getExternalStorageDirectory(), "img"+counter+".jpg");
 		counter++;
 		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
@@ -146,14 +148,20 @@ public class MainActivity extends Activity {
 		// super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode == 80 && resultCode == RESULT_OK) {
 
-			Log.v(TAG, f.getAbsolutePath());
-
 			Foto new_foto = new Foto(f.getName(), f.getAbsolutePath());
 
 			// adiciona nova foto no arraylist<Foto>
 			foto_array.add(new_foto);
 			// notifica adapter para atualizar o conteudo
 			adaptador.notifyDataSetChanged();
+		}
+		else if(requestCode == 81 && resultCode == RESULT_OK){
+		int index = data.getIntExtra("arg2", 0);
+		if(data.getBooleanExtra("changed-flag", true)){
+			foto_array.get(index).setChangedFlag();
+			adaptador.notifyDataSetChanged();
+			}
+		
 		}
 
 	}

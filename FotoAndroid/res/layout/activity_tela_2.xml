@@ -1,11 +1,9 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/LinearLayout1"
+    android:id="@+id/FrameLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#111111"
-    android:gravity="top"
-    android:orientation="vertical"
     tools:context=".Tela_2" >
 
     <FrameLayout
@@ -24,21 +22,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" >
 
-            <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="61dp"
-                android:src="@drawable/ic_launcher" />
-
             <SeekBar
                 android:id="@+id/seekBar1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:layout_below="@+id/textView1" />
+                android:layout_below="@+id/textView1"
+                android:progress="100" />
 
             <TextView
                 android:id="@+id/textView2"
@@ -54,7 +44,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:layout_below="@+id/textView2" />
+                android:layout_below="@+id/textView2"
+                android:progress="100" />
 
             <TextView
                 android:id="@+id/textView3"
@@ -70,7 +61,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:layout_below="@+id/textView3" />
+                android:layout_below="@+id/textView3"
+                android:progress="100" />
 
             <Button
                 android:id="@+id/button1"
@@ -87,13 +79,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:layout_below="@+id/imageView2"
-                android:layout_marginTop="53dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="46dp"
                 android:text="TextView"
                 android:textColor="#FF0000" />
 
         </RelativeLayout>
-
     </FrameLayout>
 
-</LinearLayout>
+</FrameLayout>

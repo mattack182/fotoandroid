@@ -34,16 +34,16 @@ public class Tela_2 extends Activity {
 	
 	private int VISIVEL = 0;
 	private int INVISIVEL = 4;
-	private Bitmap bmp;
-	private Bitmap bmp_preview;
-	private double seek1_value = 0;
-	private double seek2_value = 0;
-	private double seek3_value = 0;
+	private Bitmap bmp_global;
+//	private Bitmap bmp_preview_global;
+	private double seek1_value = 1;
+	private double seek2_value = 1;
+	private double seek3_value = 1;
 	private int bt_action;
 	
 	
-	ImageView img_view;
-	ImageView img_view_thumb;
+	ImageView imgView;
+	//ImageView imgView_thumb;
 	SeekBar seekbar1;
 	SeekBar seekbar2;
 	SeekBar seekbar3;
@@ -80,14 +80,15 @@ public class Tela_2 extends Activity {
 		button_aplicar = (Button)findViewById(R.id.button1);
 		button_aplicar.setVisibility(INVISIVEL);
 		
-		img_view_thumb = (ImageView)findViewById(R.id.imageView2);
-		img_view_thumb.setVisibility(INVISIVEL);
+		//imgView_thumb = (ImageView)findViewById(R.id.imageView2);
+	//	imgView_thumb.setVisibility(INVISIVEL);
 		
 		path = getIntent().getStringExtra("path");
 		name = getIntent().getStringExtra("name");
 		index = getIntent().getIntExtra("arg2", 0);
 		foto = new Foto(name, path);
-		bmp = foto.getBitmap();
+		bmp_global = foto.getBitmap();	
+//		bmp_preview_global = ThumbnailUtils.extractThumbnail(bmp_global, 120, 120);		
 		atualizaTela();
 	}
 	
@@ -103,8 +104,10 @@ public class Tela_2 extends Activity {
 	}	
 	
 	public void atualizaTela(){
-		img_view = (ImageView)findViewById(R.id.imageView1);
-		img_view.setImageBitmap(bmp);
+		imgView = (ImageView)findViewById(R.id.imageView1);
+		imgView.setImageBitmap(bmp_global);
+//		bmp_preview_global = ThumbnailUtils.extractThumbnail(bmp_global, 120, 120);
+//		imgView_thumb.setImageBitmap(bmp_preview_global);
 	}
 
 	@Override
@@ -121,14 +124,10 @@ public class Tela_2 extends Activity {
 			if(enabled){
 				
 				// habilita botoes na tela para ajustes antes de aplicar o filtro
-				img_view.setImageAlpha(40);
-				
-				Bitmap bitmap_temp = bmp;
-				ByteArrayOutputStream stream = new ByteArrayOutputStream();
-	            bitmap_temp.compress(Bitmap.CompressFormat.JPEG, 70, stream);
-				foto.img_thumb = ThumbnailUtils.extractThumbnail(bitmap_temp, 150, 150);				
-				img_view_thumb.setImageBitmap(foto.img_thumb);			
-				img_view_thumb.setVisibility(VISIVEL);					
+				imgView.setImageAlpha(40);	
+			
+//				imgView_thumb.setImageBitmap(bmp_preview_global);
+//				imgView_thumb.setVisibility(VISIVEL);					
 				button_aplicar.setVisibility(VISIVEL);				
 				seekbar1.setVisibility(VISIVEL);
 				seekbar2.setVisibility(VISIVEL);
@@ -140,33 +139,47 @@ public class Tela_2 extends Activity {
 				
 				// Controles Seekbar e atualização do thumbnail para preview
 				seekbar1.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+//					Bitmap bmp_preview_local;
+					
 					@Override
 					public void onStopTrackingTouch(SeekBar seekBar) {
-						// TODO Auto-generated method stub				
+						// TODO Auto-generated method stub						
+//						foto.doImageProcessing(FILTRO_COR, bmp_preview_local, seek1_value, 1, 1);
+//						imgView_thumb.setImageBitmap(bmp_preview_local);
+//						bmp_preview_global = bmp_preview_local;
 					}			
 					@Override
 					public void onStartTrackingTouch(SeekBar seekBar) {
-						// TODO Auto-generated method stub				
+						// TODO Auto-generated method stub
+						// inverte bmp_preview_global 1/seek1_value
+//						foto.doImageProcessing(FILTRO_COR, bmp_preview_global, (1/seek1_value), 1, 1);
+//						bmp_preview_local = bmp_preview_global;
 					}			
 					@Override
 					public void onProgressChanged(SeekBar seekBar, int progress,
 							boolean fromUser) {
-						// TODO Auto-generated method stub
-						seek1_value = progress * 0.01;
-						txt_red.setText("Vermelho: "+progress);
+						// TODO Auto-generated method stub						
+						seek1_value = progress * 0.01;						
+						txt_red.setText("Vermelho: "+progress);					
 					}
 				});
 				seekbar2.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+//					Bitmap bmp_preview_local;
 					
 					@Override
 					public void onStopTrackingTouch(SeekBar seekBar) {
 						// TODO Auto-generated method stub
+//						foto.doImageProcessing(FILTRO_COR, bmp_preview_local, 1, seek2_value, 1);
+//						imgView_thumb.setImageBitmap(bmp_preview_local);
+//						bmp_preview_global = bmp_preview_local;
 						
 					}
 					
 					@Override
 					public void onStartTrackingTouch(SeekBar seekBar) {
 						// TODO Auto-generated method stub
+//						foto.doImageProcessing(FILTRO_COR, bmp_preview_global, 1, (1/seek2_value), 1);
+//						bmp_preview_local = bmp_preview_global;
 						
 					}
 					
@@ -180,17 +193,21 @@ public class Tela_2 extends Activity {
 					}
 				});
 				seekbar3.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+//					Bitmap bmp_preview_local;
 					
 					@Override
 					public void onStopTrackingTouch(SeekBar seekBar) {
 						// TODO Auto-generated method stub
-						
+//						foto.doImageProcessing(FILTRO_COR, bmp_preview_local, 1, 1, seek3_value);
+//						imgView_thumb.setImageBitmap(bmp_preview_local);
+//						bmp_preview_global = bmp_preview_local;
 					}
 					
 					@Override
 					public void onStartTrackingTouch(SeekBar seekBar) {
 						// TODO Auto-generated method stub
-						
+//						foto.doImageProcessing(FILTRO_COR, bmp_preview_global, 1, 1, 1/seek3_value);
+//						bmp_preview_local = bmp_preview_global;
 					}
 					
 					@Override
@@ -210,11 +227,11 @@ public class Tela_2 extends Activity {
 				seekbar2.setVisibility(INVISIVEL);
 				seekbar3.setVisibility(INVISIVEL);
 				button_aplicar.setVisibility(INVISIVEL);				
-				img_view_thumb.setVisibility(INVISIVEL);					
+//				imgView_thumb.setVisibility(INVISIVEL);					
 				txt_red.setVisibility(INVISIVEL);
 				txt_green.setVisibility(INVISIVEL);
 				txt_blue.setVisibility(INVISIVEL);				
-				img_view.setImageAlpha(255);				
+				imgView.setImageAlpha(255);				
 			}			
 			break;
 			
@@ -243,7 +260,8 @@ public class Tela_2 extends Activity {
 		
 		switch(bt_action){		
 		case FILTRO_COR:
-			foto.doImageProcessing(foto.FILTRO_COR, bmp, seek1_value, seek2_value, seek3_value);
+			bmp_global = foto.getBitmap();
+			foto.doImageProcessing(foto.FILTRO_COR, bmp_global, seek1_value, seek2_value, seek3_value);
 			UI_Controls(CTRL_FILTRO_COR, false);
 			foto.setChangedFlag();
 			atualizaTela();
@@ -265,12 +283,12 @@ public class Tela_2 extends Activity {
 		case R.id.item2:
 			//setBt_action(FILTRO_NEGATIVO);
 			//UI_Controls(CTRL_FILTRO_NEGATIVO, true);
-			foto.doImageProcessing(foto.FILTRO_NEGATIVO, bmp, 0, 0, 0);			
+			foto.doImageProcessing(foto.FILTRO_NEGATIVO, bmp_global, 0, 0, 0);			
 			foto.setChangedFlag();
 			atualizaTela();
 			break;
 		case R.id.item3:
-			foto.salvaBitmapSDCard(bmp, path);
+			foto.salvaBitmapSDCard(bmp_global, path);
 			Toast.makeText(getApplicationContext(), "A foto "+foto.nome+" foi salva no SD Card com sucesso!",
 					Toast.LENGTH_SHORT).show();
 		default:

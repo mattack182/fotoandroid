@@ -1,14 +1,10 @@
 package com.fotoandroid;
 
-import java.io.ByteArrayOutputStream;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,13 +25,11 @@ public class Tela_2 extends Activity {
 	public final int CTRL_FILTRO_OVERLAY = 4;
 	public final int FILTRO_COR = 1;
 	public final int FILTRO_NEGATIVO = 2;
-	// public final int FILTRO_SEPIA = 3;
-	// ...
 	
 	private int VISIVEL = 0;
 	private int INVISIVEL = 4;
 	private Bitmap bmp_global;
-//	private Bitmap bmp_preview_global;
+	private Bitmap bmp_preview_global;
 	private double seek1_value = 1;
 	private double seek2_value = 1;
 	private double seek3_value = 1;
@@ -43,7 +37,7 @@ public class Tela_2 extends Activity {
 	
 	
 	ImageView imgView;
-	//ImageView imgView_thumb;
+	ImageView imgView_thumb;
 	SeekBar seekbar1;
 	SeekBar seekbar2;
 	SeekBar seekbar3;
@@ -80,15 +74,15 @@ public class Tela_2 extends Activity {
 		button_aplicar = (Button)findViewById(R.id.button1);
 		button_aplicar.setVisibility(INVISIVEL);
 		
-		//imgView_thumb = (ImageView)findViewById(R.id.imageView2);
-	//	imgView_thumb.setVisibility(INVISIVEL);
+		imgView_thumb = (ImageView)findViewById(R.id.imageView2);
+		imgView_thumb.setVisibility(INVISIVEL);
 		
 		path = getIntent().getStringExtra("path");
 		name = getIntent().getStringExtra("name");
 		index = getIntent().getIntExtra("arg2", 0);
 		foto = new Foto(name, path);
 		bmp_global = foto.getBitmap();	
-//		bmp_preview_global = ThumbnailUtils.extractThumbnail(bmp_global, 120, 120);		
+		bmp_preview_global = ThumbnailUtils.extractThumbnail(bmp_global, 120, 120);		
 		atualizaTela();
 	}
 	
@@ -106,8 +100,8 @@ public class Tela_2 extends Activity {
 	public void atualizaTela(){
 		imgView = (ImageView)findViewById(R.id.imageView1);
 		imgView.setImageBitmap(bmp_global);
-//		bmp_preview_global = ThumbnailUtils.extractThumbnail(bmp_global, 120, 120);
-//		imgView_thumb.setImageBitmap(bmp_preview_global);
+		bmp_preview_global = ThumbnailUtils.extractThumbnail(bmp_global, 120, 120);
+		imgView_thumb.setImageBitmap(bmp_preview_global);
 	}
 
 	@Override
@@ -126,8 +120,8 @@ public class Tela_2 extends Activity {
 				// habilita botoes na tela para ajustes antes de aplicar o filtro
 				imgView.setImageAlpha(40);	
 			
-//				imgView_thumb.setImageBitmap(bmp_preview_global);
-//				imgView_thumb.setVisibility(VISIVEL);					
+				imgView_thumb.setImageBitmap(bmp_preview_global);
+				imgView_thumb.setVisibility(VISIVEL);					
 				button_aplicar.setVisibility(VISIVEL);				
 				seekbar1.setVisibility(VISIVEL);
 				seekbar2.setVisibility(VISIVEL);
@@ -139,84 +133,93 @@ public class Tela_2 extends Activity {
 				
 				// Controles Seekbar e atualização do thumbnail para preview
 				seekbar1.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-//					Bitmap bmp_preview_local;
+					Bitmap bmp_preview_local;
 					
 					@Override
-					public void onStopTrackingTouch(SeekBar seekBar) {
-						// TODO Auto-generated method stub						
-//						foto.doImageProcessing(FILTRO_COR, bmp_preview_local, seek1_value, 1, 1);
-//						imgView_thumb.setImageBitmap(bmp_preview_local);
-//						bmp_preview_global = bmp_preview_local;
+					public void onStopTrackingTouch(SeekBar seekBar) {										
+						foto.doImageProcessing(FILTRO_COR, bmp_preview_local, seek1_value, seek2_value, seek3_value);
+						imgView_thumb.setImageBitmap(bmp_preview_local);						
+						// FAZ UMA COPIA DA IMAGEM GLOBAL
+						bmp_preview_local = Bitmap.createBitmap(bmp_preview_global);
+						
 					}			
 					@Override
 					public void onStartTrackingTouch(SeekBar seekBar) {
-						// TODO Auto-generated method stub
-						// inverte bmp_preview_global 1/seek1_value
-//						foto.doImageProcessing(FILTRO_COR, bmp_preview_global, (1/seek1_value), 1, 1);
-//						bmp_preview_local = bmp_preview_global;
-					}			
+						// FAZ UMA COPIA DA IMAGEM GLOBAL
+						bmp_preview_local = Bitmap.createBitmap(bmp_preview_global);
+					}
+					
 					@Override
 					public void onProgressChanged(SeekBar seekBar, int progress,
-							boolean fromUser) {
-						// TODO Auto-generated method stub						
+							boolean fromUser) {						
 						seek1_value = progress * 0.01;						
-						txt_red.setText("Vermelho: "+progress);					
+						txt_red.setText("Vermelho: "+progress);
+						
+//						if ( seekBar.getId() == R.id.seekBar1){
+//							seek1_value = progress * 0.01;						
+//							txt_red.setText("Vermelho: "+progress);	
+//						} else if ( seekBar.getId() == R.id.seekBar2){
+//							seek2_value = progress * 0.01;
+//							txt_green.setText("Verde: "+progress);
+//						} else {
+//							seek3_value = progress * 0.01;
+//							txt_blue.setText("Azul: "+progress);
+//						}
 					}
 				});
 				seekbar2.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-//					Bitmap bmp_preview_local;
+					Bitmap bmp_preview_local;
 					
 					@Override
 					public void onStopTrackingTouch(SeekBar seekBar) {
-						// TODO Auto-generated method stub
-//						foto.doImageProcessing(FILTRO_COR, bmp_preview_local, 1, seek2_value, 1);
-//						imgView_thumb.setImageBitmap(bmp_preview_local);
-//						bmp_preview_global = bmp_preview_local;
+						
+						foto.doImageProcessing(FILTRO_COR, bmp_preview_local, seek1_value, seek2_value, seek3_value);
+						imgView_thumb.setImageBitmap(bmp_preview_local);
+						// FAZ UMA COPIA DA IMAGEM GLOBAL
+						bmp_preview_local = Bitmap.createBitmap(bmp_preview_global);		
 						
 					}
 					
 					@Override
 					public void onStartTrackingTouch(SeekBar seekBar) {
-						// TODO Auto-generated method stub
-//						foto.doImageProcessing(FILTRO_COR, bmp_preview_global, 1, (1/seek2_value), 1);
-//						bmp_preview_local = bmp_preview_global;
+						// FAZ UMA COPIA DA IMAGEM GLOBAL
+						bmp_preview_local = Bitmap.createBitmap(bmp_preview_global);
 						
 					}
 					
 					@Override
 					public void onProgressChanged(SeekBar seekBar, int progress,
 							boolean fromUser) {
-						// TODO Auto-generated method stub
+						
 						seek2_value = progress * 0.01;
 						txt_green.setText("Verde: "+progress);
 						
 					}
 				});
 				seekbar3.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-//					Bitmap bmp_preview_local;
+					Bitmap bmp_preview_local;
 					
 					@Override
 					public void onStopTrackingTouch(SeekBar seekBar) {
-						// TODO Auto-generated method stub
-//						foto.doImageProcessing(FILTRO_COR, bmp_preview_local, 1, 1, seek3_value);
-//						imgView_thumb.setImageBitmap(bmp_preview_local);
-//						bmp_preview_global = bmp_preview_local;
+						
+						foto.doImageProcessing(FILTRO_COR, bmp_preview_local, seek1_value, seek2_value, seek3_value);
+						imgView_thumb.setImageBitmap(bmp_preview_local);
+						// FAZ UMA COPIA DA IMAGEM GLOBAL
+						bmp_preview_local = Bitmap.createBitmap(bmp_preview_global);
+						
 					}
 					
 					@Override
 					public void onStartTrackingTouch(SeekBar seekBar) {
-						// TODO Auto-generated method stub
-//						foto.doImageProcessing(FILTRO_COR, bmp_preview_global, 1, 1, 1/seek3_value);
-//						bmp_preview_local = bmp_preview_global;
+						// FAZ UMA COPIA DA IMAGEM GLOBAL
+						bmp_preview_local = Bitmap.createBitmap(bmp_preview_global);
 					}
 					
 					@Override
 					public void onProgressChanged(SeekBar seekBar, int progress,
-							boolean fromUser) {
-						// TODO Auto-generated method stub
+							boolean fromUser) {						
 						seek3_value = progress * 0.01;
-						txt_blue.setText("Azul: "+progress);
-						
+						txt_blue.setText("Azul: "+progress);						
 					}
 				});
 
@@ -227,7 +230,7 @@ public class Tela_2 extends Activity {
 				seekbar2.setVisibility(INVISIVEL);
 				seekbar3.setVisibility(INVISIVEL);
 				button_aplicar.setVisibility(INVISIVEL);				
-//				imgView_thumb.setVisibility(INVISIVEL);					
+				imgView_thumb.setVisibility(INVISIVEL);					
 				txt_red.setVisibility(INVISIVEL);
 				txt_green.setVisibility(INVISIVEL);
 				txt_blue.setVisibility(INVISIVEL);				

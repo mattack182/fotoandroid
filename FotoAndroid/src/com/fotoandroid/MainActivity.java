@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,10 +25,12 @@ import android.widget.TextView;
 public class MainActivity extends Activity {
 	
 	private File f = null;
+	
 	public int counter;
 	public String TAG = "FotoAndroid";
+	
 	Adaptador adaptador;
-	ArrayList<Foto> foto_array = new ArrayList<Foto>();
+	ArrayList<Foto> foto_array = new ArrayList<Foto>();	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +58,6 @@ public class MainActivity extends Activity {
 
 	}
 
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.		
@@ -77,7 +77,39 @@ public class MainActivity extends Activity {
 		return super.onMenuItemSelected(featureId, item);
 
 	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		// super.onActivityResult(requestCode, resultCode, data);
+		if (requestCode == 80 && resultCode == RESULT_OK) {
+
+			Foto new_foto = new Foto(f.getName(), f.getAbsolutePath());
+
+			// adiciona nova foto no arraylist<Foto>
+			foto_array.add(new_foto);
+			// notifica adapter para atualizar o conteudo
+			adaptador.notifyDataSetChanged();
+		}
+		else if(requestCode == 81 && resultCode == RESULT_OK){
+		int index = data.getIntExtra("arg2", 0);
+		if(data.getBooleanExtra("changed-flag", true)){
+			foto_array.get(index).setChangedFlag();
+			adaptador.notifyDataSetChanged();
+			}
+		
+		}
+
+	}
 	
+	public void capturaFoto(View v) {
+		
+		f = new File(Environment.getExternalStorageDirectory(), "img"+counter+".jpg");
+		counter++;
+		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+		intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+		startActivityForResult(intent, 80);
+	}
 	
 	/*
 	 * Classe Adaptador
@@ -128,39 +160,6 @@ public class MainActivity extends Activity {
 
 			return arg1;
 
-		}
-
-	}
-
-	public void capturaFoto(View v) {
-		
-		f = new File(Environment.getExternalStorageDirectory(), "img"+counter+".jpg");
-		counter++;
-		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-		intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-		startActivityForResult(intent, 80);
-	}
-
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// TODO Auto-generated method stub
-		// super.onActivityResult(requestCode, resultCode, data);
-		if (requestCode == 80 && resultCode == RESULT_OK) {
-
-			Foto new_foto = new Foto(f.getName(), f.getAbsolutePath());
-
-			// adiciona nova foto no arraylist<Foto>
-			foto_array.add(new_foto);
-			// notifica adapter para atualizar o conteudo
-			adaptador.notifyDataSetChanged();
-		}
-		else if(requestCode == 81 && resultCode == RESULT_OK){
-		int index = data.getIntExtra("arg2", 0);
-		if(data.getBooleanExtra("changed-flag", true)){
-			foto_array.get(index).setChangedFlag();
-			adaptador.notifyDataSetChanged();
-			}
-		
 		}
 
 	}

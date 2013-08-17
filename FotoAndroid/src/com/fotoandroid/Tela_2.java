@@ -263,7 +263,7 @@ public class Tela_2 extends Activity {
 		
 		switch(bt_action){		
 		case FILTRO_COR:
-			bmp_global = foto.getBitmap();
+			//bmp_global = foto.getBitmap();
 			foto.doImageProcessing(foto.FILTRO_COR, bmp_global, seek1_value, seek2_value, seek3_value);
 			UI_Controls(CTRL_FILTRO_COR, false);
 			foto.setChangedFlag();
